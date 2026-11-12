@@ -240,25 +240,42 @@ form.cake__step { display: grid; justify-items: center; gap: var(--s3); }
 }
 
 /* ---------- CẢNH 7 · Món quà ---------- */
-.gift { gap: var(--s6); }
+.gift { gap: var(--s6); overflow: hidden; }
 .gift__cta { display: grid; justify-items: center; gap: var(--s4); }
 .gift__wait { font-size: var(--t-sm); color: var(--text-dim); }
-.vouchers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); width: min(100%, 580px); }
-.vouchers:empty { display: none; }
-.voucher { position: relative; display: grid; align-content: start; gap: 6px; min-height: 120px; padding: 20px 22px 46px; border-radius: 8px; background: var(--milk); color: var(--ink); text-align: left; text-shadow: none;
-  box-shadow: 0 26px 60px -30px rgba(3, 4, 14, .9); grid-column: span 2; overflow: hidden;
-  -webkit-mask: radial-gradient(circle 9px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat;
-  mask: radial-gradient(circle 9px at 0 50%, transparent 98%, #000) left / 51% 100% no-repeat, radial-gradient(circle 9px at 100% 50%, transparent 98%, #000) right / 51% 100% no-repeat; }
-@media (min-width: 520px) { .voucher--mini { grid-column: span 1; } }
-.voucher--main { grid-template-columns: auto 1fr; column-gap: 20px; align-items: center; padding-left: 0; }
-.voucher__stub { align-self: stretch; display: grid; place-items: center; padding: 0 12px 0 20px; border-right: 1px dashed rgba(42, 36, 64, .35); font-size: .6875rem; letter-spacing: .28em; writing-mode: vertical-rl; transform: rotate(180deg); color: rgba(42, 36, 64, .6); }
-.voucher__body { display: grid; gap: 6px; }
-.voucher__title { font-family: var(--f-display); font-style: italic; font-weight: 600; font-size: 1.5rem; line-height: 1.12; }
-.voucher__text { font-size: var(--t-sm); line-height: 1.5; color: rgba(42, 36, 64, .82); }
-.voucher__stamp { position: absolute; right: 16px; bottom: 12px; padding: 4px 10px; border: 1.500px solid var(--rose); border-radius: 4px; color: #B7505F; font-size: .6875rem; font-weight: 600; letter-spacing: .14em; background: rgba(251, 243, 231, .9);
-  opacity: 0; transform: rotate(-10deg) scale(1.7); transition: opacity var(--d-fast) var(--e-out), transform var(--d-base) var(--e-spring); }
-.voucher.claimed .voucher__stamp { opacity: 1; transform: rotate(-10deg) scale(1); }
-.v-note { grid-column: span 2; font-size: var(--t-sm); color: var(--text-dim); }
+.gift__note { font-size: var(--t-sm); color: var(--text-dim); }
+.gift__note[hidden], .bq[hidden] { display: none; }
+/* Bó hoa: khung 600×770, mọi thứ bên trong tính theo % */
+.bq { position: relative; width: min(100%, 470px, 62svh); aspect-ratio: 600 / 770; margin-top: calc(var(--s4) * -1); text-shadow: none; -webkit-tap-highlight-color: transparent; }
+.bq__glow, .bq__rays { position: absolute; left: 50%; top: 40%; width: 170%; aspect-ratio: 1; margin: -85% 0 0 -85%; pointer-events: none; }
+.bq__glow::before, .bq__rays::before { content: ''; position: absolute; inset: 0; border-radius: 50%; }
+.bq__glow::before { background: radial-gradient(closest-side, rgba(255, 214, 150, .5), rgba(255, 122, 178, .26) 38%, rgba(140, 110, 255, .16) 62%, transparent 78%); }
+.bq__rays::before { background: repeating-conic-gradient(from 0deg, rgba(255, 232, 170, .2) 0 5deg, transparent 5deg 20deg);
+  -webkit-mask: radial-gradient(closest-side, transparent 22%, #000 40%, transparent 74%); mask: radial-gradient(closest-side, transparent 22%, #000 40%, transparent 74%); }
+.bq.is-live .bq__rays::before { animation: bq-spin 70s linear infinite; }
+.bq.is-live .bq__glow::before { animation: bq-breathe 5s ease-in-out infinite; }
+.bq__stage { position: absolute; inset: 0; }
+.bq__layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.bq__f { position: absolute; cursor: pointer; will-change: transform; }
+.bq__f svg { display: block; width: 100%; height: auto; overflow: visible; }
+.bq__paper { filter: drop-shadow(0 26px 30px rgba(3, 4, 14, .55)); }
+.bq__sparks { position: absolute; inset: 0; pointer-events: none; }
+.bq__spark { position: absolute; width: var(--sz); height: var(--sz); margin: calc(var(--sz) / -2); opacity: 0; background: radial-gradient(closest-side, #fff, rgba(255, 240, 190, .9) 30%, transparent 70%);
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%); }
+.bq.is-live .bq__spark { animation: bq-twinkle 2.4s ease-in-out infinite; }
+.bq__fly { position: absolute; left: 0; top: 0; width: 7.5%; margin: -3.75% 0 0 -3.75%; pointer-events: none; will-change: transform; }
+.bq__fly svg { display: block; width: 100%; overflow: visible; }
+.bq__wing { transform-box: view-box; transform-origin: 50% 50%; }
+.bq.is-live .bq__wing { animation: bq-flap .32s ease-in-out infinite alternate; }
+.bq__rain { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: 0; transition: opacity var(--d-slow) var(--e-out); }
+.gift.is-open .bq__rain { opacity: 1; }
+.bq__petal { position: absolute; left: 0; top: 0; width: var(--sz); height: calc(var(--sz) * 1.25); border-radius: 80% 0 80% 0; opacity: .92; pointer-events: none; will-change: transform; }
+@keyframes bq-spin { to { transform: rotate(360deg); } }
+@keyframes bq-breathe { 50% { transform: scale(1.07); opacity: .8; } }
+@keyframes bq-twinkle { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+@keyframes bq-flap { from { transform: scaleX(1); } to { transform: scaleX(.25); } }
+.rm .bq__spark { opacity: .8; }
+.rm .bq__rain, .rm .bq__fly { display: none; }
 
 /* ---------- CẢNH 8 · Kết ---------- */
 /* Hai nhịp: lời cuối + chữ ký, rồi khung hình cuối cùng là trái tim sao */

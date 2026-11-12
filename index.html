@@ -175,9 +175,15 @@
   </header>
   <div class="gift__cta" id="giftCta">
     <button class="btn magnetic" type="button" id="giftBtn"><span class="btn__in">Chạm để mở quà</span></button>
-    <p class="gift__wait"><span id="voucherCount">3</span> voucher yêu thương đang chờ em</p>
+    <p class="gift__wait" id="giftWait"></p>
   </div>
-  <div class="vouchers" id="vouchers" aria-live="polite"></div>
+  <div class="bq" id="bouquet" hidden>
+    <div class="bq__glow" aria-hidden="true"></div>
+    <div class="bq__rays" aria-hidden="true"></div>
+    <div class="bq__stage" id="bqStage" role="img" aria-label="Một bó hoa rực rỡ: mẫu đơn, hồng, hướng dương, thược dược, đồng tiền, tulip và oải hương"></div>
+  </div>
+  <p class="gift__note" id="giftNote" hidden></p>
+  <div class="bq__rain" id="bqRain" aria-hidden="true"></div>
 </section>
 
 <!-- ===== CẢNH 8 · Kết ===== -->
@@ -224,6 +230,7 @@
 <script src="js/audio.js"></script>
 <script src="js/sky.js"></script>
 <script src="js/cake3d.js"></script>
+<script src="js/bouquet.js"></script>
 <script src="js/ui.js"></script>
 <script src="js/scenes/gate.js"></script>
 <script src="js/scenes/hello.js"></script>

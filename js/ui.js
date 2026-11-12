@@ -7,7 +7,7 @@
   const HB = window.HB, { $, $$, C, RM, FINE, rand } = HB, gsap = window.gsap;
   if (!gsap) return;
   const A = HB.audio, body = document.body;
-  const HOT = 'button, a, input, .pol, .voucher';
+  const HOT = 'button, a, input, .pol, .bq__f';
 
   /* ---------- Nút âm thanh ---------- */
   const sound = $('#soundBtn'), sTitle = $('.sound__title'), sSub = $('.sound__sub');

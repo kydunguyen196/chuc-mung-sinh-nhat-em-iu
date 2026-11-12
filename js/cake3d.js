@@ -1,5 +1,6 @@
 /* =========================================================
-   cake3d.js — bánh kem "trời đêm" dựng bằng hình khối Three.js,
+   cake3d.js — bánh kem hai tầng dựng bằng Three.js (khối tiện tròn bo mép, kem chảy,
+   bông kem, dâu, cốm màu, nến sọc, trái tim vàng),
    ngọn lửa là shader, khói là sprite tự huỷ. Bánh bám theo khung
    #cakeAnchor trong DOM nên luôn khớp bố cục và vị trí cuộn.
    ========================================================= */
@@ -16,37 +17,95 @@
   const group = new THREE.Group(), spin = new THREE.Group();
   group.add(spin); group.visible = false; group.rotation.x = .3;
   const std = (color, o) => new THREE.MeshStandardMaterial(Object.assign({ color, roughness: .62, metalness: 0 }, o));
-  const mMilk = std(0xFBF3E7), mNight = std(0x2B2A5E, { roughness: .5 }), mPeach = std(0xFFB89A), mGold = std(0xF4D58D, { roughness: .35, metalness: .35 });
-  const mSpark = std(0xF4D58D, { emissive: 0xF4D58D, emissiveIntensity: .9 });
+  const mPlate = std(0xFFFBF5, { roughness: .3 }), mGold = std(0xF6D37A, { roughness: .28, metalness: .55 });
+  const mBlush = std(0xF8B9CB, { roughness: .78 }), mCream = std(0xFFF3DF, { roughness: .78 });
+  const mIcing = std(0xFFFEFA, { roughness: .32 }), mRose = std(0xFF7FA6, { roughness: .26 });
+  const mBerry = std(0xE5304E, { roughness: .32 }), mLeaf = std(0x4FA35F, { roughness: .6 });
+  const mHeart = std(0xFFD27A, { roughness: .22, metalness: .6, emissive: 0xFF9A4A, emissiveIntensity: .25 });
   const mesh = (geo, mat, x, y, z) => { const m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); spin.add(m); return m; };
-
-  mesh(new THREE.CylinderGeometry(2.1, 2.2, .12, 56), mMilk, 0, .06);
-  const rim = mesh(new THREE.TorusGeometry(2.13, .035, 8, 64), mGold, 0, .12); rim.rotation.x = Math.PI / 2;
-  mesh(new THREE.CylinderGeometry(1.6, 1.6, 1, 56), mNight, 0, .62);
-  mesh(new THREE.CylinderGeometry(1.65, 1.65, .13, 56), mMilk, 0, 1.17);
-  mesh(new THREE.CylinderGeometry(1.05, 1.05, .8, 48), mMilk, 0, 1.63);
-  mesh(new THREE.CylinderGeometry(1.1, 1.1, .11, 48), mPeach, 0, 2.07);
-
-  /* Kem chảy quanh mép hai tầng */
-  const dripGeo = new THREE.CylinderGeometry(.1, .1, 1, 10), dropGeo = new THREE.SphereGeometry(.1, 10, 8);
-  function drips(radius, top, n, mat, hMin, hMax) {
+  const V = (x, y) => new THREE.Vector2(x, y);
+  const lathe = (pts, seg) => new THREE.LatheGeometry(pts.slice().reverse(), seg || 72);
+  const arc = (cx, cy, r, a0, a1, n) => { const o = []; for (let k = 0; k <= n; k++) { const a = a0 + (a1 - a0) * k / n; o.push(V(cx + Math.cos(a) * r, cy + Math.sin(a) * r)); } return o; };
+  /* Nhiều bản sao cùng hình: một InstancedMesh = một draw call */
+  const dummy = new THREE.Object3D(), tint = new THREE.Color();
+  function inst(geo, mat, n, place) {
+    const m = new THREE.InstancedMesh(geo, mat, n);
     for (let i = 0; i < n; i++) {
-      const a = (i / n) * Math.PI * 2 + rand(-.08, .08), h = rand(hMin, hMax), x = Math.cos(a) * radius, z = Math.sin(a) * radius;
-      const d = mesh(dripGeo, mat, x, top - h / 2, z); d.scale.y = h;
-      mesh(dropGeo, mat, x, top - h, z);
+      dummy.position.set(0, 0, 0); dummy.rotation.set(0, 0, 0); dummy.scale.setScalar(1);
+      const c = place(dummy, i); dummy.updateMatrix(); m.setMatrixAt(i, dummy.matrix);
+      if (c) m.setColorAt(i, tint.set(c));
     }
+    m.instanceMatrix.needsUpdate = true; if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    spin.add(m); return m;
   }
-  drips(1.6, 1.14, 18, mMilk, .16, .52);
-  drips(1.05, 2.04, 13, mPeach, .12, .36);
+  const ring = (r, y, n, off) => (d, i) => { const a = (i / n) * 6.2832 + (off || 0); d.position.set(Math.cos(a) * r, y, Math.sin(a) * r); d.rotation.y = -a; };
 
-  /* Sao vàng rắc trên tầng dưới */
-  const starGeo = new THREE.SphereGeometry(.034, 6, 5);
-  for (let i = 0; i < 30; i++) { const a = rand(0, 6.283); mesh(starGeo, mSpark, Math.cos(a) * 1.61, rand(.2, .58), Math.sin(a) * 1.61); }
+  /* Đế bánh: chân đế vàng + đĩa sứ viền vàng */
+  mesh(lathe([V(0, 0), V(.42, 0), V(.3, -.12), V(.5, -.26), V(1.1, -.36), V(1.05, -.42), V(0, -.42)]), mGold);
+  mesh(lathe([V(0, .12), ...arc(2.1, .06, .06, Math.PI / 2, -Math.PI / 2, 6), V(0, 0)]), mPlate);
+  const rim = mesh(new THREE.TorusGeometry(2.15, .04, 10, 80), mGold, 0, .06); rim.rotation.x = Math.PI / 2;
 
-  /* Nến + ngọn lửa */
-  const candleGeo = new THREE.CylinderGeometry(.045, .045, .56, 10), wickGeo = new THREE.CylinderGeometry(.008, .008, .08, 5);
+  /* Hai tầng bánh bo tròn mép + lớp kem phủ có vành chảy xuống (biên dạng đi từ trên xuống) */
+  const tier = (r, y0, h, b) => lathe([V(0, y0 + h), ...arc(r - b, y0 + h - b, b, Math.PI / 2, 0, 8), V(r, y0), V(0, y0)]);
+  const icing = (r, yt, b, lip) => lathe([V(0, yt + .035), ...arc(r - b, yt - b + .005, b + .03, Math.PI / 2, 0, 8), V(r + .03, yt - lip), V(r, yt - lip - .03)]);
+  const Y1 = .12, H1 = 1, R1 = 1.6, Y2 = Y1 + H1, H2 = .82, R2 = 1.05, TOP = Y2 + H2;
+  mesh(tier(R1, Y1, H1, .1), mBlush);
+  mesh(icing(R1, Y2, .1, .14), mIcing);
+  mesh(tier(R2, Y2, H2, .09), mCream);
+  mesh(icing(R2, TOP, .09, .12), mRose);
+  /* Giọt kem chảy: viên nang nhiều độ dài, đầu tròn sẵn nên không bị méo */
+  function drips(r, top, n, mat, lens) {
+    lens.forEach((len, k) => {
+      const geo = new THREE.CapsuleGeometry(.062, len, 6, 12), cnt = Math.ceil(n / lens.length);
+      inst(geo, mat, cnt, (d, i) => { const a = ((i * lens.length + k) / n) * 6.2832 + rand(-.05, .05); d.position.set(Math.cos(a) * (r - .035), top - len / 2 - .05, Math.sin(a) * (r - .035)); });
+    });
+  }
+  drips(R1, Y2 - .06, 20, mIcing, [.1, .44, .22, .34]);
+  drips(R2, TOP - .05, 14, mRose, [.08, .3, .16, .24]);
+
+  /* Hạt ngọc vàng quanh chân mỗi tầng */
+  const pearl = new THREE.SphereGeometry(.052, 12, 10);
+  inst(pearl, mGold, 56, ring(R1 + .02, Y1 + .05, 56));
+  inst(pearl, mGold, 38, ring(R2 + .02, Y2 + .08, 38));
+  /* Bông kem + dâu tây xen kẽ trên bậc giữa hai tầng, vòng bông kem nhỏ trên mặt bánh */
+  const kiss = lathe([V(0, .33), V(.045, .26), V(.09, .19), V(.14, .12), V(.17, .05), V(.15, 0), V(0, 0)], 10);
+  const berry = lathe([V(0, .32), V(.07, .28), V(.13, .19), V(.145, .09), V(.1, .02), V(0, 0)], 16);
+  const LEDGE = (R1 + R2) / 2 + .02;
+  inst(kiss, mIcing, 9, ring(LEDGE, Y2 + .03, 9));
+  inst(berry, mBerry, 9, (d, i) => { ring(LEDGE, Y2 + .03, 9, Math.PI / 9)(d, i); d.rotation.z = rand(-.25, .25); d.rotation.x = rand(-.2, .2); });
+  inst(new THREE.ConeGeometry(.07, .05, 5), mLeaf, 9, (d, i) => { ring(LEDGE - .15, Y2 + .06, 9, Math.PI / 9)(d, i); d.scale.set(1.3, 1, 1.3); });
+  inst(kiss, mIcing, 10, (d, i) => { ring(R2 - .17, TOP + .03, 10, .3)(d, i); d.scale.setScalar(.8); });
+  inst(pearl, mBerry, 10, (d, i) => { ring(R2 - .17, TOP + .3, 10, .3)(d, i); d.scale.setScalar(1.15); });
+  /* Cốm màu rắc quanh thân hai tầng */
+  const SPR = ['#FF6B8B', '#FFD166', '#7BDFF2', '#B79CFF', '#8CE99A', '#FFFFFF', '#FF9F68'];
+  inst(new THREE.CapsuleGeometry(.018, .075, 3, 6), std(0xffffff, { roughness: .4 }), 90, (d, i) => {
+    const a = rand(0, 6.2832); d.position.set(Math.cos(a) * (R1 + .012), rand(Y1 + .16, Y2 - .5), Math.sin(a) * (R1 + .012));
+    d.rotateY(-a); d.rotateX(rand(0, 3.14)); return SPR[i % SPR.length];
+  });
+  inst(new THREE.SphereGeometry(.03, 8, 6), std(0xffffff, { roughness: .35 }), 46, (d, i) => {
+    const a = rand(0, 6.2832); d.position.set(Math.cos(a) * (R2 + .012), rand(Y2 + .2, TOP - .36), Math.sin(a) * (R2 + .012)); return SPR[(i + 2) % SPR.length];
+  });
+
+  /* Trái tim vàng cắm giữa mặt bánh */
+  const hs = new THREE.Shape();
+  hs.moveTo(0, -.34); hs.bezierCurveTo(-.5, -.02, -.42, .4, -.16, .4); hs.bezierCurveTo(-.06, .4, 0, .32, 0, .24);
+  hs.bezierCurveTo(0, .32, .06, .4, .16, .4); hs.bezierCurveTo(.42, .4, .5, -.02, 0, -.34);
+  const heartGeo = new THREE.ExtrudeGeometry(hs, { depth: .07, bevelEnabled: true, bevelThickness: .035, bevelSize: .035, bevelSegments: 4, curveSegments: 20 });
+  heartGeo.translate(0, 0, -.035);
+  const heart = mesh(heartGeo, mHeart, 0, TOP + .78, 0); heart.scale.setScalar(.72);
+  mesh(new THREE.CylinderGeometry(.014, .014, .5, 6), mGold, 0, TOP + .28, 0);
+
+  /* Nến sọc xoắn + ngọn lửa */
+  const candleGeo = new THREE.CylinderGeometry(.055, .055, .62, 16), wickGeo = new THREE.CylinderGeometry(.008, .008, .08, 5);
   const flameGeo = new THREE.PlaneGeometry(.7, 1); flameGeo.translate(0, .5, 0);
   const mWick = std(0x1a1320);
+  const stripe = (col) => {
+    const c = document.createElement('canvas'); c.width = 32; c.height = 32;
+    const g = c.getContext('2d'); g.fillStyle = '#FFFDF8'; g.fillRect(0, 0, 32, 32); g.strokeStyle = col; g.lineWidth = 9;
+    for (let k = -1; k < 3; k++) { g.beginPath(); g.moveTo(k * 32 - 4, 36); g.lineTo(k * 32 + 36, -4); g.stroke(); }
+    const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 5); return t;
+  };
+  const CANDLE = ['#FF7FA6', '#FFC94D', '#6CC7FF', '#B08CFF', '#62D6A4'];
   const flameVS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }';
   const flameFS = `
     precision mediump float; varying vec2 vUv; uniform float uTime, uOn, uBend, uSeed;
@@ -65,8 +124,8 @@
     }`;
   const flames = [];
   for (let i = 0; i < N; i++) {
-    const a = (i / N) * Math.PI * 2 + .3, x = Math.cos(a) * .62, z = Math.sin(a) * .62, top = 2.12 + .56;
-    mesh(candleGeo, i % 2 ? mGold : mMilk, x, 2.12 + .28, z);
+    const a = (i / N) * Math.PI * 2 + .3, x = Math.cos(a) * .5, z = Math.sin(a) * .5, top = TOP + .03 + .62;
+    mesh(candleGeo, std(0xffffff, { roughness: .45, map: stripe(CANDLE[i]) }), x, TOP + .03 + .31, z);
     mesh(wickGeo, mWick, x, top + .03, z);
     const u = { uTime: { value: 0 }, uOn: { value: 1 }, uBend: { value: 0 }, uSeed: { value: Math.random() } };
     const f = new THREE.Mesh(flameGeo, new THREE.ShaderMaterial({ uniforms: u, vertexShader: flameVS, fragmentShader: flameFS, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
@@ -75,9 +134,10 @@
   }
 
   /* Ánh sáng: nền trời + đèn chính + ánh nến */
-  group.add(new THREE.HemisphereLight(0xa9a6e6, 0x1a1530, .85));
-  const key = new THREE.DirectionalLight(0xfff0dd, .55); key.position.set(-4, 5, 6); group.add(key);
-  const glow = new THREE.PointLight(0xffa550, 2.4, 10, 2); glow.position.set(0, 3.2, .6); group.add(glow);
+  group.add(new THREE.HemisphereLight(0xfff0f6, 0x4a3c78, .72));
+  const key = new THREE.DirectionalLight(0xfff0dd, .5); key.position.set(-4, 5, 6); group.add(key);
+  const back = new THREE.DirectionalLight(0xff9ad0, .45); back.position.set(5, 3, -5); group.add(back);
+  const glow = new THREE.PointLight(0xffa550, 1.5, 10, 2); glow.position.set(0, TOP + 1.1, .6); group.add(glow);
   sky.add(group);
 
   /* Khói: sprite mềm, tự gỡ và giải phóng material khi tan */
@@ -106,7 +166,7 @@
   const inv = new THREE.Quaternion();
   sky.onFrame((dt, t) => {
     const r = anchor.getBoundingClientRect(), vh = innerHeight;
-    const on = r.bottom > -vh * .25 && r.top < vh * 1.25;
+    const on = HB.state.opened && r.bottom > -vh * .25 && r.top < vh * 1.25;
     group.visible = on;
     if (!on) return;
     const w = sky.toWorld(r.left + r.width / 2, r.top + r.height / 2);

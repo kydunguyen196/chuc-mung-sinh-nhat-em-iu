@@ -48,11 +48,12 @@ window.HAL = {
       story: 'Còn mười ngàn năm nữa để kể tiếp. Anh hứa sẽ kể thật dài.' }
   ],
 
-  vouchers: [
-    { main: true, title: 'Một ngày làm công chúa', text: 'Anh lo trọn: đón, ăn, xem phim, xách đồ. Không hạn sử dụng.' },
-    { title: 'Ôm không giới hạn', text: 'Đổi được bất cứ lúc nào, kể cả lúc đang giận.' },
-    { title: 'Thắng 1 trận cãi nhau', text: 'Anh nhận thua ngay, không cần lý do.' }
-  ],
+  /* Món quà: bó hoa (vẽ bằng code trong js/bouquet.js), ở đây chỉ có lời. */
+  bouquet: {
+    wait: 'Có một thứ rực rỡ đang chờ em',
+    title: ['Một bó hoa cho em,', 'rực rỡ như chính em vậy'],
+    note: 'Chạm vào từng bông hoa thử xem ♥'
+  },
 
   /* Điều ước: chỉ hiện trên máy người xem, không gửi đi đâu cả. */
   wish: {

@@ -43,9 +43,9 @@ Cả ba font đều có subset `vietnamese` trên Google Fonts; đã kiểm tra 
 | 2 | Lời chào | `scenes/hello.js` | "Happy Birthday" bung từng ký tự 3D (SplitText), tên được gõ ra, nghiêng theo con trỏ/con quay | nhẹ |
 | 3 | Chuyện của mình | `scenes/story.js` | Cảnh ghim: 5 mốc là 5 ngôi sao, đường nối vẽ bằng DrawSVG, mây tháng 4 | nhẹ |
 | 4 | Ký ức | `scenes/memories.js` | Cảnh ghim: polaroid bay từ xa tới (CSS 3D), caption gõ chữ, lightbox | vừa |
-| 5 | Bánh kem & điều ước | `scenes/cake.js` + `cake3d.js` | Bánh 3D, lửa shader, thổi micro / chạm-giữ, khói, pháo hoa, điều ước thành sao băng | **nặng** |
+| 5 | Bánh kem & điều ước | `scenes/cake.js` + `cake3d.js` | Bánh 3D hai tầng (kem chảy, dâu, cốm màu, nến sọc, tim vàng), lửa shader, thổi micro / chạm-giữ, khói, pháo hoa, điều ước thành sao băng | **nặng** |
 | 6 | Lá thư | `scenes/letter.js` | Giấy có vân, từng dòng hiện như mực thấm, nhạc dịu lại | vừa (blur) |
-| 7 | Món quà | `scenes/gift.js` | Ba sao băng rơi thành ba voucher, chạm để đóng dấu | nhẹ |
+| 7 | Món quà | `scenes/gift.js` + `bouquet.js` | Sao băng tụ lại, bó hoa SVG nở từng cánh (28 bông, 8 loài), hào quang, cánh hoa rơi, bướm, lấp lánh, pháo hoa; chạm bông nào bông đó tung cánh | vừa |
 | 8 | Kết | `scenes/ending.js` | Chữ ký, bộ đếm 10.000 năm, camera lùi, bụi sao thành tim → "Hal" → tuổi → tim; easter egg chạm tim 5 lần | **nặng** |
 
 Lớp tinh tế (`ui.js`): con trỏ quán tính + vệt sao (desktop), chạm nở tim (cảm ứng), nút từ tính, âm UI, nút tắt tiếng luôn hiện, grain + vignette.

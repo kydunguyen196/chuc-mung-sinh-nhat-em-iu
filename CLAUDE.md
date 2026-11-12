@@ -16,13 +16,14 @@ An interactive birthday card (Vietnamese copy) for Hal, concept "Mười Ngàn N
 
 ## Architecture
 
-- **`js/config.js`** sets `window.HAL`: all editable content (names, birthday, music, `photos[]`, `timeline[]`, `vouchers[]`, wish copy, the easter-egg line). The letter text itself lives in `index.html` (`CẢNH 6`).
+- **`js/config.js`** sets `window.HAL`: all editable content (names, birthday, music, `photos[]`, `timeline[]`, `bouquet` copy, wish copy, the easter-egg line). The letter text itself lives in `index.html` (`CẢNH 6`).
 - **`js/core.js`** creates the `HB` namespace: helpers, `HB.bus` events (`open`, `unlock`, `quality`), `HB.Q` quality tiers, shared `HB.pointer` (mouse or device orientation), `HB.odometer`, `HB.typeText`, and `HB.scene(name, init)`.
 - **`js/sky.js`** owns the single Three.js renderer and exposes `HB.sky` (`setScroll`, `morph`, `burst`, `shoot`, `firework`, `flash`, `warp`, `toWorld`, `onFrame`, `reset`). When WebGL is missing it leaves a stub with the same methods, so scenes never check for it. It also measures real FPS and calls `HB.Q.downgrade()`.
+- **`js/bouquet.js`** exposes `HB.buildBouquet(container)`: the gift bouquet drawn entirely in code as layered SVG (one `<svg>` per flower, one `<path>` per petal; layout and colours in `PLAN` / `C`). `scenes/gift.js` animates it and builds it once, on first open.
 - **`js/cake3d.js`** builds the cake inside the sky scene (`HB.cake3d`); the cake follows the DOM box `#cakeAnchor` every frame, as the dust shapes follow the element passed to `sky.setDustAnchor()`.
 - **`js/scenes/*.js`**: one file per scene, each calling `HB.scene(name, init)`. `init` runs once (after fonts are ready) and **returns a reset function** used by "Đọc lại từ đầu". A new scene with state must return a reset; never add listeners or create objects inside a reset. `gate.js` is the exception: it runs immediately so the preloader can show progress.
 - **`js/main.js`** sets up Lenis + ScrollTrigger, runs the scene inits, the scroll-progress trigger (drives the sky's dawn), and `HB.replay()`.
-- Script order in `index.html` matters: CDN libs → `config` → `core` → `audio` → `sky` → `cake3d` → `ui` → scenes → `main`.
+- Script order in `index.html` matters: CDN libs → `config` → `core` → `audio` → `sky` → `cake3d` → `bouquet` → `ui` → scenes → `main`.
 
 ## Conventions
 
