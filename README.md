@@ -25,7 +25,7 @@ Phải là `https://` thì "Thổi thật vào micro" mới xin được quyền
 
 | Muốn thay | Ở đâu |
 |---|---|
-| Ảnh | Bỏ file vào `assets/photos/` với tên `1.jpg` … `6.jpg` (vuông, ~1000px, <300KB; đổi tên/đuôi `.webp` trong `js/config.js` → `photos`). Thiếu ảnh thì hiện khung trời sao có nhãn. Ảnh 1 và 4 còn dùng cho hai polaroid nhỏ cạnh lá thư (desktop). |
+| Ảnh | Bỏ file vào `assets/photos/` rồi khai báo trong `js/config.js` → `photos` (đường dẫn, `pos` là điểm giữ lại khi cắt vuông, nhãn, chú thích). Thêm bớt bao nhiêu tấm cũng được; nên để cạnh dài ~1280px, <300KB. Thiếu ảnh thì hiện khung trời sao có nhãn. Hai polaroid nhỏ cạnh lá thư (desktop) lấy ảnh theo `data-photo` trong `index.html`. |
 | Nhạc | Bỏ file vào `assets/music/10-ngan-nam-piano.mp3` (đổi tên/tiêu đề trong `config.js` → `music`). Thiếu file thì trang phát piano tổng hợp. |
 | Lá thư | Sửa trực tiếp trong `index.html`, phần `CẢNH 6`. |
 | Tên, ngày sinh, dòng thời gian, lời ở cảnh bó hoa, chữ ô điều ước, câu bí mật | `js/config.js`. Tuổi và năm tự tính từ ngày sinh. |

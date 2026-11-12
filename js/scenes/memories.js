@@ -17,6 +17,7 @@ HB.scene('memories', () => {
       if (box.querySelector('img')) return;
       const img = new Image();
       img.alt = ''; img.decoding = 'async'; img.draggable = false;
+      if (p.pos) img.style.objectPosition = p.pos;
       img.onload = () => box.classList.add('has-img');
       img.onerror = () => img.remove();
       img.src = p.src; box.appendChild(img);
@@ -107,7 +108,7 @@ HB.scene('memories', () => {
   addEventListener('resize', () => layout(lastP));
   ST.create({ trigger: pin, start: 'top 60%', onEnter: () => { entered = true; type(focus); } });
   ST.create({
-    trigger: pin, start: 'top top', end: () => '+=' + Math.round(innerHeight * .8 * (N - 1)), pin: true, anticipatePin: 1,
+    trigger: pin, start: 'top top', end: () => '+=' + Math.round(innerHeight * Math.min(.8 * (N - 1), 6.5)), pin: true, anticipatePin: 1,
     onUpdate: (s) => layout(s.progress)
   });
 

@@ -17,15 +17,23 @@ window.HAL = {
     volume: 0.6
   },
 
-  /* Ảnh kỷ niệm: đặt ảnh vào assets/photos/ (jpg/png/webp, nên vuông ~1000px, <300KB).
+  /* Ảnh kỷ niệm: đặt ảnh vào assets/photos/ (jpg/png/webp, cạnh dài ~1280px, <300KB), thêm bớt bao nhiêu tấm cũng được.
+     Khung ảnh hình vuông: pos là điểm giữ lại khi cắt (ngang dọc, giống object-position).
      Thiếu ảnh nào thì ô đó hiện khung trời sao + nhãn, không bị vỡ trang. */
   photos: [
-    { src: 'assets/photos/1.jpg', label: 'giải muay thái', caption: 'Ngày định mệnh ở góc sàn 🥊' },
-    { src: 'assets/photos/2.jpg', label: 'buổi hẹn đầu', caption: 'Buổi hẹn đầu, anh run hơn lúc lên sàn' },
-    { src: 'assets/photos/3.jpg', label: '26.12', caption: 'Chính thức là của nhau ♥' },
-    { src: 'assets/photos/4.jpg', label: 'tháng 8, quay về', caption: 'Lần này nắm tay chặt hơn ♥' },
-    { src: 'assets/photos/5.jpg', label: 'đi chơi', caption: 'Đi đâu cũng được, miễn là có em' },
-    { src: 'assets/photos/6.jpg', label: 'selfie', caption: 'Hai đứa dở hơi nhất quả đất' }
+    { src: 'assets/photos/01.jpg', pos: '50% 56%', label: 'cả hội', caption: 'Hồi mình còn đứng lẫn giữa cả hội' },
+    { src: 'assets/photos/02.jpg', pos: '55% 100%', label: 'ngày bảo vệ đồ án', caption: 'Ngày anh bảo vệ đồ án, có iu pử đứng cạnh' },
+    { src: 'assets/photos/03.jpg', pos: '50% 20%', label: 'nặn gốm', caption: 'Đi nặn gốm, tay lấm lem mà vui' },
+    { src: 'assets/photos/04.jpg', pos: '66% 50%', label: 'đi ăn', caption: 'Ăn gì cũng ngon, miễn là ngồi cạnh iu pử' },
+    { src: 'assets/photos/05.jpg', pos: '50% 26%', label: 'selfie', caption: 'Iu pử lúc nào cũng phải giơ tay chữ V' },
+    { src: 'assets/photos/06.jpg', pos: '50% 24%', label: 'soi gương', caption: 'Hai đứa một cây đen ♥' },
+    { src: 'assets/photos/07.jpg', pos: '50% 78%', label: 'góc dìm hàng', caption: 'Góc chụp dìm hàng của hai đứa' },
+    { src: 'assets/photos/08.jpg', pos: '24% 50%', label: 'dạo đêm', caption: 'Chở iu pử dạo đêm Hà Nội' },
+    { src: 'assets/photos/09.jpg', pos: '46% 50%', label: 'photobooth', caption: 'Chạm mũi một cái ♥' },
+    { src: 'assets/photos/10.jpg', pos: '50% 40%', label: 'ảnh studio', caption: 'Ôm iu pử thật chặt' },
+    { src: 'assets/photos/11.jpg', pos: '50% 38%', label: 'hai đứa tí hon', caption: 'Phiên bản tí hon của hai đứa' },
+    { src: 'assets/photos/12.jpg', pos: '50% 48%', label: 'sân bay', caption: 'Ở sân bay, trước lúc xa nhau' },
+    { src: 'assets/photos/13.jpg', pos: '50% 52%', label: 'tạm xa', caption: 'Xa nhau một chút thôi, rồi mình lại gặp' }
   ],
 
   /* Mỗi mốc là một ngôi sao trong chòm sao "Chuyện của mình".
