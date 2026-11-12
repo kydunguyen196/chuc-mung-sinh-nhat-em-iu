@@ -35,7 +35,7 @@ HB.scene('memories', () => {
 
   const cards = P.map((p, i) => {
     const wrap = document.createElement('div'); wrap.className = 'mem__card';
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'pol';
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'pol' + (p.caption.length > 70 ? ' pol--long' : '');
     b.setAttribute('aria-label', 'Xem ảnh: ' + p.caption);
     const cap = document.createElement('span'); cap.className = 'pol__cap'; cap.style.display = 'block';
     b.append(photoBox(p), cap);

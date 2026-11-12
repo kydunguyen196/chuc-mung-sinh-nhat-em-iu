@@ -173,6 +173,7 @@ main { position: relative; z-index: 3; opacity: 0; visibility: hidden; }
   box-shadow: 0 34px 70px -28px rgba(3, 4, 14, .9), 0 0 0 1px rgba(255, 255, 255, .5) inset; }
 .pol__cap { font-family: var(--f-hand); font-weight: 500; font-size: 1.3rem; line-height: 1.22; min-height: 3.3em; padding: 10px 4px 12px; }
 button.pol { display: block; width: 100%; }
+.pol--long .pol__cap { font-size: 1.06rem; line-height: 1.24; }
 .ph { position: relative; aspect-ratio: 1; overflow: hidden; display: grid; place-items: center; border-radius: 2px;
   background:
     radial-gradient(1px 1px at 22% 30%, #fff 50%, transparent 51%), radial-gradient(1.500px 1.500px at 71% 22%, var(--gold) 50%, transparent 51%),

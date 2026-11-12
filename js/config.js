@@ -21,19 +21,19 @@ window.HAL = {
      Khung ảnh hình vuông: pos là điểm giữ lại khi cắt (ngang dọc, giống object-position).
      Thiếu ảnh nào thì ô đó hiện khung trời sao + nhãn, không bị vỡ trang. */
   photos: [
-    { src: 'assets/photos/01.jpg', pos: '50% 56%', label: 'cả hội', caption: 'Hồi mình còn đứng lẫn giữa cả hội' },
-    { src: 'assets/photos/02.jpg', pos: '55% 100%', label: 'ngày bảo vệ đồ án', caption: 'Ngày anh bảo vệ đồ án, có iu đứng cạnh' },
-    { src: 'assets/photos/03.jpg', pos: '50% 20%', label: 'nặn gốm', caption: 'Đi nặn gốm, tay lấm lem mà vui' },
-    { src: 'assets/photos/04.jpg', pos: '66% 50%', label: 'đi ăn', caption: 'Ăn gì cũng ngon, miễn là ngồi cạnh iu' },
-    { src: 'assets/photos/05.jpg', pos: '50% 26%', label: 'selfie', caption: 'Iu lúc nào cũng phải giơ tay chữ V' },
-    { src: 'assets/photos/06.jpg', pos: '50% 24%', label: 'soi gương', caption: 'Hai đứa một cây đen ♥' },
-    { src: 'assets/photos/07.jpg', pos: '50% 78%', label: 'góc dìm hàng', caption: 'Góc chụp dìm hàng của hai đứa' },
-    { src: 'assets/photos/08.jpg', pos: '24% 50%', label: 'dạo đêm', caption: 'Chở iu dạo đêm Hà Nội' },
-    { src: 'assets/photos/09.jpg', pos: '46% 50%', label: 'photobooth', caption: 'Chạm mũi một cái ♥' },
-    { src: 'assets/photos/10.jpg', pos: '50% 40%', label: 'ảnh studio', caption: 'Ôm iu thật chặt' },
-    { src: 'assets/photos/11.jpg', pos: '50% 38%', label: 'hai đứa tí hon', caption: 'Phiên bản tí hon của hai đứa' },
-    { src: 'assets/photos/12.jpg', pos: '50% 48%', label: 'sân bay', caption: 'Ở sân bay, trước lúc xa nhau' },
-    { src: 'assets/photos/13.jpg', pos: '50% 52%', label: 'tạm xa', caption: 'Xa nhau một chút thôi, rồi mình lại gặp' }
+    { src: 'assets/photos/01.jpg', pos: '50% 56%', label: 'ngày bắt đầu', caption: 'Ảnh này là ngày bắt đầu chuyện tình iu của hai đứa mình, mà trông iu chẳng vui gì cả' },
+    { src: 'assets/photos/02.jpg', pos: '55% 100%', label: 'ngày bảo vệ đồ án', caption: 'Ngày anh đi bảo vệ đồ án, anh bất ngờ lắm khi thấy em xuất hiện. Trước mặt mọi người thì ngại, nhưng anh rất muốn chụp với em, hihi chụp được rùi' },
+    { src: 'assets/photos/03.jpg', pos: '50% 20%', label: 'chuyến đi xa đầu tiên', caption: 'Chuyến đi chơi xa đầu tiên của hai đứa mình, đi vầy đất có sản phẩm đem về :>' },
+    { src: 'assets/photos/10.jpg', pos: '50% 40%', label: 'photobooth đầu tiên', caption: 'Tấm ảnh photobooth đầu tiên của hai đứa mình nè, hồi ý tóc em ngắn mà hai đứa còn ngượng' },
+    { src: 'assets/photos/11.jpg', pos: '50% 38%', label: 'phiên bản mini', caption: 'Phiên bản mini của hai đứa nha' },
+    { src: 'assets/photos/07.jpg', pos: '50% 78%', label: 'sau khi gặp lại', caption: 'Lần đi chơi sau khoảng thời gian gặp lại. Anh chụp xấu vì ít khi hai đứa chụp với nhau, anh muốn có thật nhiều ảnh với em, cũng hơi run' },
+    { src: 'assets/photos/04.jpg', pos: '66% 50%', label: 'nhiều ảnh hơn', caption: 'Sau đấy thì mình bắt đầu có nhiều ảnh chụp với nhau hơn rồi nè' },
+    { src: 'assets/photos/05.jpg', pos: '50% 26%', label: 'không cần make', caption: 'Hì, không cần make iu vẫn lun là người xinh nhấttt' },
+    { src: 'assets/photos/08.jpg', pos: '24% 50%', label: 'đi bão', caption: 'Ngày kỉ niệm, anh đòi đi bão thì được iu chiều đồng ý. Lần đầu anh được đi bão riêng với gái hehe, sau này kể cho con cháu: ngày xưa ông bà cháy lắm' },
+    { src: 'assets/photos/06.jpg', pos: '50% 24%', label: 'quay trở lại', caption: 'Ngày mình chính thức quay trở lại với nhau nè. Cảm ơn iu vì đã tha thứ cho anh ạ' },
+    { src: 'assets/photos/09.jpg', pos: '46% 50%', label: 'photobooth lần hai', caption: 'Photobooth lần này tóc iu dài hơn rùiiii' },
+    { src: 'assets/photos/12.jpg', pos: '50% 48%', label: 'selfie gần nhất', caption: 'Bức ảnh selfie gần nhất của hai đứa' },
+    { src: 'assets/photos/13.jpg', pos: '50% 52%', label: 'iu đi học xa', caption: 'Iu đi học xa nhớ giữ gìn sức khoẻ nha. Mình xa nhau một xíu, nhưng vẫn luôn về với nhau nhen' }
   ],
 
   /* Mỗi mốc là một ngôi sao trong chòm sao "Chuyện của mình".
