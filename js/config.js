@@ -5,6 +5,8 @@ window.HAL = {
   recipient: { full: 'Nguyễn Thúy Hà', nick: 'Hal' },
   sender: { full: 'Nguyễn Tự Kỳ Du', short: 'Kỳ Du' },
   birthday: { day: 13, month: 11, year: 2005 },
+  /* Ngày chính thức yêu nhau: cảnh kết đếm số ngày từ hôm đó tới hôm nay (theo giờ máy người xem). */
+  together: { day: 26, month: 12, year: 2025 },
 
   /* Nhạc nền: đặt file mp3 vào assets/music/ đúng tên dưới đây.
      Nếu chưa có file, trang tự phát một đoạn piano dịu nhẹ thay thế. */

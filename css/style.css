@@ -296,6 +296,8 @@ form.cake__step { display: grid; justify-items: center; gap: var(--s3); }
 .ending__years { display: inline-flex; align-items: baseline; gap: .22em; font-family: var(--f-display); font-weight: 500; font-size: var(--t-2xl); line-height: 1; color: var(--gold); margin-top: var(--s5); }
 .ending__years .odo { align-self: center; }
 .ending__years-unit { font-style: italic; font-size: .42em; color: var(--text-dim); }
+.ending__years { flex-wrap: wrap; justify-content: center; row-gap: var(--s2); }
+.ending__years-pre { flex-basis: 100%; font-style: italic; font-size: .36em; color: var(--text-dim); }
 .ending__foot { font-size: clamp(.6875rem, 3vw, .8125rem); letter-spacing: clamp(.12em, 1.2vw, .3em); white-space: nowrap; color: var(--milk); margin-bottom: var(--s4); }
 
 /* ---------- Lightbox ---------- */

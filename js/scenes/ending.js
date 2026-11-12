@@ -1,6 +1,6 @@
 /* =========================================================
    CẢNH 8 · Kết — camera lùi xa, bụi sao hội tụ thành trái tim → tên → số tuổi
-   → trái tim. Chữ ký được viết ra, bộ đếm lăn tới 10.000 năm.
+   → trái tim. Chữ ký được viết ra, bộ đếm lăn tới số ngày hai đứa đã bên nhau.
    Easter egg: chạm 5 lần vào trái tim.
    ========================================================= */
 HB.scene('ending', () => {
@@ -8,6 +8,11 @@ HB.scene('ending', () => {
   const { $, C, RM, rand } = HB, gsap = window.gsap, ST = window.ScrollTrigger;
   const A = HB.audio, sky = HB.sky;
   const sec = $('#ending'), heart = $('#heartBtn'), secret = $('#secret'), text = $('.sign__text'), line = $('.sign__line');
+  /* Số ngày từ ngày yêu nhau tới hôm nay, tính theo nửa đêm giờ địa phương */
+  const T = C.together, d0 = new Date(T.year, T.month - 1, T.day), now = new Date();
+  const DAYS = Math.max(0, Math.round((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - d0) / 864e5));
+  $('#yearsOdo').dataset.digits = String(DAYS).length;
+  $('#daysLine').setAttribute('aria-label', 'Hai đứa mình đã bên nhau ' + DAYS + ' ngày');
   const setYears = HB.odometer($('#yearsOdo'));
   const intro = ['.ending .head__label', '.ending__quote', '.ending__love'], outro = ['.ending__foot', '#replayBtn'].map(s => $(s));
   const all = intro.concat(['.ending__years'], outro);
@@ -44,14 +49,14 @@ HB.scene('ending', () => {
   }
   function play() {
     if (played) return; played = true;
-    if (RM) { setYears(10000); return; }
+    if (RM) { setYears(DAYS); return; }
     tl = gsap.timeline({ delay: .5 })
       .to(intro, { autoAlpha: 1, y: 0, duration: 1.2, ease: 'expo.out', stagger: .28 })
       .to(text, { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut' }, '-=.3')
       .to(text, { fillOpacity: 1, duration: .6, ease: 'power2.out' }, '-=.6')
       .to(line, { drawSVG: '100%', duration: .7, ease: 'power3.out' }, '-=.3')
       .to('.ending__years', { autoAlpha: 1, y: 0, duration: .9, ease: 'expo.out' })
-      .to(yv, { v: 10000, duration: 3.4, ease: 'power3.out', onUpdate: () => setYears(yv.v) }, '<');
+      .to(yv, { v: DAYS, duration: 3.4, ease: 'power3.out', onUpdate: () => setYears(yv.v) }, '<');
   }
 
   ST.create({ trigger: sec, start: 'top 55%', onEnter: play });

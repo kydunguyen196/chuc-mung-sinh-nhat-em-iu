@@ -46,7 +46,7 @@ Cả ba font đều có subset `vietnamese` trên Google Fonts; đã kiểm tra 
 | 5 | Bánh kem & điều ước | `scenes/cake.js` + `cake3d.js` | Bánh 3D hai tầng (kem chảy, dâu, cốm màu, nến sọc, tim vàng), lửa shader, thổi micro / chạm-giữ, khói, pháo hoa, điều ước thành sao băng | **nặng** |
 | 6 | Lá thư | `scenes/letter.js` | Giấy có vân, từng dòng hiện như mực thấm, nhạc dịu lại | vừa (blur) |
 | 7 | Món quà | `scenes/gift.js` + `bouquet.js` | Sao băng tụ lại, bó hoa SVG nở từng cánh (28 bông, 8 loài), hào quang, cánh hoa rơi, bướm, lấp lánh, pháo hoa; chạm bông nào bông đó tung cánh | vừa |
-| 8 | Kết | `scenes/ending.js` | Chữ ký, bộ đếm 10.000 năm, camera lùi, bụi sao thành tim → "Hal" → tuổi → tim; easter egg chạm tim 5 lần | **nặng** |
+| 8 | Kết | `scenes/ending.js` | Chữ ký, bộ đếm số ngày hai đứa đã bên nhau (từ `together` trong config), camera lùi, bụi sao thành tim → "Hal" → tuổi → tim; easter egg chạm tim 5 lần | **nặng** |
 
 Lớp tinh tế (`ui.js`): con trỏ quán tính + vệt sao (desktop), chạm nở tim (cảm ứng), nút từ tính, âm UI, nút tắt tiếng luôn hiện, grain + vignette.
 
