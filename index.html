@@ -1,305 +1,238 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" class="is-locked">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Gửi Hal · Thư sinh nhật</title>
 <meta name="description" content="Có một bức thư dành riêng cho Hal.">
-<meta name="theme-color" content="#1B1535">
-<meta property="og:title" content="Có một bức thư dành riêng cho Hal 💌">
+<meta name="theme-color" content="#060914">
+<meta property="og:title" content="Có một bức thư dành riêng cho Hal">
 <meta property="og:description" content="Chạm để mở thư.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%92%8C%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1026'/%3E%3Cpath d='M16 5l2.6 8.4L27 16l-8.4 2.6L16 27l-2.6-8.4L5 16l8.4-2.6z' fill='%23F4D58D'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400;1,500;1,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="night is-locked">
+<body>
 
-<!-- ===== Thanh tiến trình: sợi chỉ ===== -->
-<nav class="thread" aria-label="Tiến trình bức thư">
-  <div class="thread__track">
-    <div class="thread__fill"></div>
-    <span class="thread__heart" aria-hidden="true">♥</span>
-  </div>
-  <div class="thread__knots"></div>
-</nav>
+<!-- Bầu trời: một canvas WebGL duy nhất chạy suốt bộ phim -->
+<div class="sky-fallback" aria-hidden="true"><i class="sky-fallback__dawn"></i></div>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 
-<canvas class="petals" aria-hidden="true"></canvas>
+<!-- Tiến trình + âm thanh -->
+<div class="progress" aria-hidden="true"><i class="progress__fill"></i></div>
+<button class="sound" id="soundBtn" type="button" aria-label="Tắt tiếng" aria-pressed="false">
+  <span class="sound__bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="sound__label"><span class="sound__title">Bài hát của mình</span><span class="sound__sub">piano</span></span>
+</button>
 
-<main>
-<!-- ===== CẢNH 1 + 2 · Màn chào & mở thư ===== -->
-<section id="s1" class="scene gate" data-scene="1" aria-label="Màn chào">
-  <div class="gate__bg gate__bg--night"></div>
-  <div class="gate__bg gate__bg--dawn"></div>
-  <canvas class="gate__stars" aria-hidden="true"></canvas>
-
+<!-- ===== CẢNH 0 + 1 · Preloader & lời mời mở thư ===== -->
+<div class="gate" id="gate">
   <div class="gate__inner">
-    <div class="gate__copy">
-      <p class="gate__date mono"><span>13 · 11 · </span><span data-year>2026</span></p>
-      <div class="gate__msgs">
-        <div class="gate__msg gate__msg--closed">
-          <h1 class="gate__title">Có một bức thư<br>dành riêng cho</h1>
-          <div class="gate__name script">Hal</div>
-        </div>
-        <div class="gate__msg gate__msg--open" aria-hidden="true">
-          <p class="gate__title">Từ một đêm đầy sao…<br>sang một ngày thật ấm.</p>
-        </div>
-      </div>
-      <div class="gate__cta">
-        <button class="btn btn--neon pulse" id="openBtn" type="button">Chạm để mở thư</button>
-        <p class="gate__hint mono">♪ nhạc sẽ bật cùng lúc · nhớ bật tiếng nha</p>
-      </div>
+    <p class="gate__date"><span>13 · 11 · </span><span data-year>2026</span></p>
+    <h1 class="gate__title">Có một bức thư<br>dành riêng cho</h1>
+    <svg class="constel" viewBox="0 0 300 160" role="img" aria-label="Hal">
+      <g class="constel__lines">
+        <path d="M42 28 L38 132"/>
+        <path d="M40 82 L96 78"/>
+        <path d="M98 30 L94 130"/>
+        <path d="M182 80 L152 73 L132 100 L149 127 L181 119"/>
+        <path d="M184 70 L183 131"/>
+        <path d="M228 26 L231 131"/>
+      </g>
+      <g class="constel__stars">
+        <circle cx="42" cy="28" r="3.2"/><circle cx="38" cy="132" r="2.4"/><circle cx="40" cy="82" r="2"/>
+        <circle cx="96" cy="78" r="2"/><circle cx="98" cy="30" r="2.6"/><circle cx="94" cy="130" r="3"/>
+        <circle cx="182" cy="80" r="2"/><circle cx="152" cy="73" r="2.8"/><circle cx="132" cy="100" r="2.2"/>
+        <circle cx="149" cy="127" r="2.6"/><circle cx="181" cy="119" r="2"/>
+        <circle cx="184" cy="70" r="2.4"/><circle cx="183" cy="131" r="3"/>
+        <circle cx="228" cy="26" r="3.4"/><circle cx="231" cy="131" r="2.6"/>
+      </g>
+    </svg>
+    <div class="gate__load" aria-live="polite"><span class="odo" id="loadOdo" data-digits="3"></span><span class="gate__pct">%</span></div>
+    <div class="gate__cta">
+      <button class="btn magnetic" id="openBtn" type="button"><span class="btn__in">Chạm để mở thư</span></button>
+      <p class="gate__hint">nhạc sẽ bật cùng lúc · nhớ bật tiếng nha</p>
     </div>
-
-    <div class="gate__stage">
-      <div class="env-pos"><div class="env-scale">
-        <div class="env-tilt">
-          <div class="env-shadow"></div>
-          <div class="envelope" id="envelope">
-            <div class="env__back"></div>
-            <button class="env__letter" type="button" aria-label="Đọc thư">
-              <span class="env__letter-hb script">Happy Birthday</span>
-              <span class="env__line" style="width:80%"></span>
-              <span class="env__line" style="width:65%"></span>
-              <span class="env__line" style="width:72%"></span>
-              <span class="env__letter-from script">— anh</span>
-            </button>
-            <div class="env__pocket">
-              <i class="fold fold--l"></i><i class="fold fold--r"></i><i class="fold fold--b"></i>
-              <span class="env__to script">gửi Hal</span>
-              <span class="env__stamp">♥</span>
-            </div>
-            <div class="env__flap">
-              <div class="flap__face flap__face--out"></div>
-              <div class="flap__face flap__face--in"></div>
-            </div>
-            <div class="env__seal" aria-hidden="true">
-              <span class="seal__half seal__half--l">♥</span>
-              <span class="seal__half seal__half--r">♥</span>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
+    <p class="gate__err" hidden>Mạng đang hơi yếu nên thư chưa mở được. Em tải lại trang giúp anh nha.</p>
   </div>
+</div>
 
-  <a class="gate__scroll" href="#s3">Cuộn xuống để đọc <span>↓</span></a>
-  <div class="balloons" aria-hidden="true">
-    <div class="balloon balloon--pink"><i></i></div>
-    <div class="balloon balloon--lav"><i></i></div>
-    <div class="balloon balloon--butter"><i></i></div>
+<main id="main">
+
+<!-- ===== CẢNH 2 · Lời chào ===== -->
+<section id="hello" class="scene hello" aria-label="Chúc mừng sinh nhật">
+  <div class="hello__tilt">
+    <p class="hello__hb" aria-label="Happy Birthday"><span class="hb-line">Happy</span> <span class="hb-line">Birthday</span></p>
+    <p class="hello__name"><span class="type" id="helloName"></span><i class="caret" aria-hidden="true"></i></p>
+    <p class="hello__meta"><span data-age>21</span> TUỔI · 13.11.<span data-year>2026</span></p>
+  </div>
+  <p class="hello__line">Từ một đêm đầy sao…<br>sang một ngày thật ấm.</p>
+  <a class="cue" href="#story" id="helloCue">Cuộn xuống để đọc<svg viewBox="0 0 12 28" aria-hidden="true"><path d="M6 0v26M1 21l5 5 5-5"/></svg></a>
+</section>
+
+<!-- ===== CẢNH 3 · Chòm sao chuyện của mình ===== -->
+<section id="story" class="scene story" aria-label="Dòng thời gian">
+  <div class="story__pin">
+    <header class="head">
+      <p class="head__label">Dòng thời gian</p>
+      <h2 class="head__title">Chuyện của mình</h2>
+    </header>
+    <div class="story__stage" id="storyStage">
+      <svg class="story__svg" aria-hidden="true"><path class="story__base"/><path class="story__draw"/></svg>
+      <i class="story__cloud" aria-hidden="true"></i>
+    </div>
+    <ol class="story__cards" id="storyCards"></ol>
   </div>
 </section>
 
-<!-- ===== CẢNH 3 · Happy Birthday + bánh kem ===== -->
-<section id="s3" class="scene hello" data-scene="3" aria-label="Chúc mừng sinh nhật">
-  <div class="hello__inner">
-    <div class="hello__title">
-      <svg class="hb-svg" viewBox="0 0 420 210" role="img" aria-label="Happy Birthday">
-        <text class="hb-text" x="210" y="88" text-anchor="middle">Happy</text>
-        <text class="hb-text" x="210" y="188" text-anchor="middle">Birthday</text>
-      </svg>
-      <div class="hello__name"><span class="type" data-text="Hal"></span><span class="caret"></span></div>
-      <p class="hello__meta mono"><span data-age>21</span> TUỔI · 13.11.<span data-year>2026</span></p>
-    </div>
-
-    <div class="cake-zone">
-      <div class="cake-tilt">
-        <div class="cake" id="cake">
-          <div class="cake__plate"></div>
-          <div class="cake__tier cake__tier--low"></div>
-          <div class="cake__drip"></div>
-          <div class="cake__top cake__top--low"></div>
-          <div class="cake__tier cake__tier--up"></div>
-          <div class="cake__top cake__top--up"></div>
-          <i class="sprinkle" style="bottom:180px;left:84px;background:#F28DA6"></i>
-          <i class="sprinkle" style="bottom:172px;left:170px;background:#FFE29A"></i>
-          <i class="sprinkle" style="bottom:186px;left:160px;width:4px;height:4px;background:#F28DA6"></i>
-          <i class="sprinkle" style="bottom:120px;left:60px;background:#C9B6E4"></i>
-          <i class="sprinkle" style="bottom:110px;left:196px;background:#FFF"></i>
-          <div class="candle candle--a"></div>
-          <div class="candle candle--b"></div>
-          <div class="flame flame--a"></div>
-          <div class="flame flame--b"></div>
-          <div class="smoke smoke--a"></div>
-          <div class="smoke smoke--b"></div>
-          <button class="cake__hit" type="button" aria-label="Thổi nến"></button>
-        </div>
-      </div>
-      <button class="chip" id="candleBtn" type="button">Chạm vào nến để thổi ✦</button>
-      <button class="link-btn" id="micBtn" type="button">🎤 hoặc thổi thật vào micro</button>
-    </div>
+<!-- ===== CẢNH 4 · Hành trình ký ức ===== -->
+<section id="memories" class="scene mem" aria-label="Thư viện kỷ niệm">
+  <div class="mem__pin">
+    <header class="head">
+      <p class="head__label">Thư viện kỷ niệm</p>
+      <h2 class="head__title">Những khoảnh khắc của mình</h2>
+    </header>
+    <div class="mem__space" id="memSpace"></div>
+    <p class="mem__count" aria-hidden="true"><span id="memIdx">1</span> / <span id="memTotal">6</span></p>
   </div>
 </section>
 
-<!-- ===== CẢNH 4 · Nội dung bức thư ===== -->
-<section id="s4" class="scene letter" data-scene="4" aria-label="Bức thư">
-  <div class="letter__deco letter__deco--l" data-speed="0.7">
-    <figure class="mini-pol" style="--r:-8deg">
-      <i class="washi washi--butter"></i>
-      <div class="mini-pol__img" data-photo="0"><span>ảnh: hai đứa</span></div>
-      <figcaption class="script">mình nè ♥</figcaption>
-    </figure>
+<!-- ===== CẢNH 5 · Bánh kem & điều ước ===== -->
+<section id="cake" class="scene cake" aria-label="Bánh kem và điều ước">
+  <div class="cake__anchor" id="cakeAnchor">
+    <svg class="cake__flat" viewBox="0 0 220 200" aria-hidden="true">
+      <ellipse cx="110" cy="178" rx="96" ry="12" fill="#FBF3E7"/>
+      <rect x="34" y="112" width="152" height="64" rx="8" fill="#2B2A5E"/>
+      <path d="M34 120q0-10 10-10h132q10 0 10 10v8q-9 14-19 0-9 18-19 0-10 12-19 0-9 20-19 0-10 12-19 0-9 16-19 0-10 14-19 0z" fill="#FBF3E7"/>
+      <rect x="62" y="66" width="96" height="48" rx="7" fill="#FBF3E7"/>
+      <path d="M62 74q0-9 9-9h78q9 0 9 9v6q-8 12-16 0-8 16-16 0-8 10-16 0-8 14-16 0-8 12-16 0z" fill="#FFB89A"/>
+      <g class="cake__flat-candles" fill="#F4D58D"><rect x="76" y="40" width="5" height="26" rx="2"/><rect x="92" y="36" width="5" height="30" rx="2"/><rect x="108" y="34" width="5" height="32" rx="2"/><rect x="124" y="36" width="5" height="30" rx="2"/><rect x="140" y="40" width="5" height="26" rx="2"/></g>
+      <g class="cake__flat-flames" fill="#FFD27A"><path d="M78.500 22q6 10 0 16q-6-6 0-16z"/><path d="M94.500 18q6 10 0 16q-6-6 0-16z"/><path d="M110.500 16q6 10 0 16q-6-6 0-16z"/><path d="M126.500 18q6 10 0 16q-6-6 0-16z"/><path d="M142.500 22q6 10 0 16q-6-6 0-16z"/></g>
+    </svg>
   </div>
-  <div class="letter__deco letter__deco--r" data-speed="1.3">
-    <figure class="mini-pol" style="--r:7deg">
-      <i class="washi washi--lav"></i>
-      <div class="mini-pol__img mini-pol__img--lav" data-photo="3"><span>ảnh: đôi găng</span></div>
-      <figcaption class="script">góc sàn của anh</figcaption>
-    </figure>
+  <div class="cake__ui">
+    <h2 class="cake__title" id="cakeTitle">Ước một điều rồi thổi nến nha</h2>
+    <div class="cake__meter" aria-hidden="true"><i id="cakeMeter"></i></div>
+
+    <div class="cake__step" id="cakeBlow">
+      <button class="btn magnetic" id="micBtn" type="button"><span class="btn__in"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11.500a6.500 6.500 0 0 0 13 0M12 18v3"/></svg>Thổi thật vào micro</span></button>
+      <button class="btn btn--quiet" id="holdBtn" type="button"><span class="btn__in">Chạm và giữ để thổi</span></button>
+    </div>
+
+    <form class="cake__step" id="wishForm" hidden autocomplete="off">
+      <label class="cake__label" for="wishInput">Điều ước của em</label>
+      <div class="wish">
+        <input class="wish__input" id="wishInput" type="text" maxlength="80" enterkeyhint="send" placeholder="Viết một điều ước…">
+        <button class="btn" type="submit"><span class="btn__in">Gửi lên trời</span></button>
+      </div>
+      <p class="cake__note" id="wishNote"></p>
+    </form>
+
+    <div class="cake__step" id="cakeDone" hidden>
+      <button class="btn btn--quiet" id="relightBtn" type="button"><span class="btn__in">Thắp lại nến</span></button>
+    </div>
+
+    <p class="cake__status" id="cakeStatus" role="status" aria-live="polite"></p>
   </div>
-  <span class="floaty floaty--a" aria-hidden="true">♥</span>
-  <span class="floaty floaty--b" aria-hidden="true">✿</span>
+</section>
+
+<!-- ===== CẢNH 6 · Lá thư ===== -->
+<section id="letter" class="scene letter" aria-label="Bức thư">
+  <figure class="mini-pol mini-pol--l" data-speed="0.7">
+    <div class="ph" data-photo="0"><span>ảnh: hai đứa</span></div>
+    <figcaption>mình nè ♥</figcaption>
+  </figure>
+  <figure class="mini-pol mini-pol--r" data-speed="1.3">
+    <div class="ph" data-photo="3"><span>ảnh: đôi găng</span></div>
+    <figcaption>góc sàn của anh</figcaption>
+  </figure>
 
   <article class="paper">
-    <i class="washi washi--lav paper__tape"></i>
-    <i class="paper__margin"></i>
-    <i class="paper__curl"></i>
+    <p class="paper__to" aria-hidden="true">gửi Hal</p>
     <div class="paper__body">
       <p class="lp lp--hi">Gửi Hal của anh,</p>
       <p class="lp">Ai mà ngờ, giữa một giải muay thái toàn mùi dầu nóng với tiếng hò hét, anh lại gặp cô gái đứng góc sàn lo găng giáp cho anh. Tưởng bị đối thủ đấm trúng, hoá ra là trúng <mark class="hl">tiếng sét ái tình</mark>. Trận đó thắng hay thua anh quên rồi, chỉ nhớ là từ hôm ấy anh thua em.</p>
       <p class="lp">Ngày <span class="ul">26 tháng 12</span>, mình chính thức là của nhau — món quà Giáng sinh đến muộn một ngày, nhưng là món quà xịn nhất anh từng nhận.</p>
       <p class="lp">Mình có những ngày rất vui, cũng có lúc lạc nhau. Tháng 4 trời hơi nhiều mây. Nhưng rồi tháng 8 em đã <span class="ul">quay lại</span>, và anh hiểu có những người sinh ra là để về bên nhau. Hiệp hai này, anh không buông tay nữa.</p>
-      <p class="lp">Cảm ơn em vì đã kiên nhẫn với một anh chàng đấm đá thì giỏi mà nói lời ngọt thì vụng. Cảm ơn em vì đã là <mark class="hl hl--pink">nhà</mark> của anh.</p>
-      <p class="lp">Hôm nay em tròn <mark class="hl hl--peach"><span data-age>21</span> tuổi</mark>. Chúc em luôn khoẻ, luôn cười thật tươi, làm gì cũng suôn sẻ, và để anh làm "người giữ găng" cho em <span class="ul ul--lav">suốt đời</span> nha.</p>
+      <p class="lp">Cảm ơn em vì đã kiên nhẫn với một anh chàng đấm đá thì giỏi mà nói lời ngọt thì vụng. Cảm ơn em vì đã là <mark class="hl">nhà</mark> của anh.</p>
+      <p class="lp">Hôm nay em tròn <mark class="hl"><span data-age>21</span> tuổi</mark>. Chúc em luôn khoẻ, luôn cười thật tươi, làm gì cũng suôn sẻ, và để anh làm "người giữ găng" cho em <span class="ul">suốt đời</span> nha.</p>
       <p class="lp">Đổi vai một chút cũng được — lần này anh đứng góc sàn, cổ vũ em. Mười ngàn năm nữa, anh vẫn chọn em.</p>
       <p class="lp lp--sign">— anh, Kỳ Du</p>
     </div>
   </article>
 </section>
 
-<!-- ===== CẢNH 5 · Thư viện ảnh ===== -->
-<section id="s5" class="scene gallery" data-scene="5" aria-label="Thư viện kỷ niệm">
-  <header class="sec-head">
-    <div>
-      <p class="eyebrow mono">THƯ VIỆN KỶ NIỆM</p>
-      <h2 class="sec-title">Những khoảnh khắc<br class="br-m"> của mình</h2>
-    </div>
-    <div class="seg" role="tablist" aria-label="Chế độ xem ảnh">
-      <button class="seg__btn is-on" type="button" data-mode="stack" role="tab" aria-selected="true">Xếp lệch</button>
-      <button class="seg__btn" type="button" data-mode="carousel" role="tab" aria-selected="false">Carousel 3D</button>
-    </div>
-  </header>
-  <div class="gal-stack" id="galStack"></div>
-  <div class="gal-carousel" id="galCarousel" hidden>
-    <div class="ring-stage"><div class="ring" id="ring"></div></div>
-    <p class="ring-hint script">Vuốt ngang để xoay vòng</p>
-  </div>
-</section>
-
-<!-- ===== CẢNH 6 · Dòng thời gian ===== -->
-<section id="s6" class="scene timeline" data-scene="6" aria-label="Dòng thời gian">
-  <header class="sec-head sec-head--solo">
-    <div>
-      <p class="eyebrow mono">DÒNG THỜI GIAN</p>
-      <h2 class="sec-title">Chuyện của mình</h2>
-    </div>
-  </header>
-  <div class="tl" id="tl">
-    <svg class="tl__svg" aria-hidden="true"><path class="tl__base"/><path class="tl__draw"/></svg>
-    <ol class="tl__list" id="tlList"></ol>
-  </div>
-</section>
-
 <!-- ===== CẢNH 7 · Món quà ===== -->
-<section id="s7" class="scene gift" data-scene="7" aria-label="Món quà">
-  <div class="gift__inner">
-    <div class="gift__left">
-      <header class="gift__head">
-        <p class="eyebrow mono" id="giftEyebrow">MÓN QUÀ NHỎ</p>
-        <h2 class="sec-title" id="giftTitle">Anh có cái này<br>cho em nè…</h2>
-      </header>
-      <div class="gift__stage">
-        <div class="gift__rays" aria-hidden="true"></div>
-        <div class="gift__shadow"></div>
-        <button class="gift__box" id="giftBox" type="button" aria-label="Mở hộp quà">
-          <div class="box-wiggle">
-            <div class="box-view">
-              <div class="box">
-                <i class="face f-front"><b class="rib rib--v"></b></i>
-                <i class="face f-back"><b class="rib rib--v"></b></i>
-                <i class="face f-right"><b class="rib rib--v"></b></i>
-                <i class="face f-left"><b class="rib rib--v"></b></i>
-                <i class="face f-bottom"></i>
-                <i class="face f-inside"></i>
-                <div class="lid">
-                  <i class="face l-top"><b class="rib rib--v"></b><b class="rib rib--h"></b></i>
-                  <i class="face l-front"><b class="rib rib--v"></b></i>
-                  <i class="face l-back"><b class="rib rib--v"></b></i>
-                  <i class="face l-right"><b class="rib rib--v"></b></i>
-                  <i class="face l-left"><b class="rib rib--v"></b></i>
-                  <div class="bow"><i class="bow__loop bow__loop--l"></i><i class="bow__loop bow__loop--r"></i><i class="bow__knot"></i></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </button>
-        <span class="spark" style="--x:-120px;--y:-110px">✦</span>
-        <span class="spark spark--pink" style="--x:110px;--y:-70px">✦</span>
-        <span class="spark" style="--x:90px;--y:-150px">✦</span>
-        <span class="spark spark--pink" style="--x:-90px;--y:-40px">✦</span>
-      </div>
-      <div class="gift__cta" id="giftCta">
-        <button class="btn btn--pink" type="button" id="giftBtn">Chạm để mở quà</button>
-        <p class="muted"><span id="voucherCount">3</span> voucher yêu thương đang chờ em</p>
-      </div>
-    </div>
-    <div class="vouchers" id="vouchers" aria-live="polite"></div>
+<section id="gift" class="scene gift" aria-label="Món quà">
+  <header class="head">
+    <p class="head__label" id="giftLabel">Món quà nhỏ</p>
+    <h2 class="head__title" id="giftTitle">Anh có cái này<br>cho em nè…</h2>
+  </header>
+  <div class="gift__cta" id="giftCta">
+    <button class="btn magnetic" type="button" id="giftBtn"><span class="btn__in">Chạm để mở quà</span></button>
+    <p class="gift__wait"><span id="voucherCount">3</span> voucher yêu thương đang chờ em</p>
   </div>
+  <div class="vouchers" id="vouchers" aria-live="polite"></div>
 </section>
 
-<!-- ===== CẢNH 8 · Kết thư ===== -->
-<section id="s8" class="scene ending" data-scene="8" aria-label="Kết thư">
-  <canvas class="ending__fx" aria-hidden="true"></canvas>
-  <div class="ending__inner">
-    <p class="eyebrow mono">LỜI CUỐI THƯ</p>
+<!-- ===== CẢNH 8 · Kết ===== -->
+<section id="ending" class="scene ending" aria-label="Kết thư">
+  <div class="ending__beat">
+    <p class="head__label">Lời cuối thư</p>
     <p class="ending__quote">Cảm ơn em vì đã đến — và vì đã quay về.</p>
-    <p class="ending__love script">Yêu em nhiều,</p>
-    <svg class="sign" viewBox="0 0 360 150" role="img" aria-label="Kỳ Du">
-      <text class="sign__text" x="180" y="100" text-anchor="middle">Kỳ Du</text>
-      <path class="sign__line" d="M 70 128 C 140 118, 230 112, 300 100"/>
+    <p class="ending__love">Yêu em nhiều,</p>
+    <svg class="sign" viewBox="0 0 360 130" role="img" aria-label="Kỳ Du">
+      <text class="sign__text" x="180" y="92" text-anchor="middle">Kỳ Du</text>
+      <path class="sign__line" d="M 78 116 C 140 108, 230 104, 292 94"/>
     </svg>
-    <div class="wax" id="wax"><div class="wax__inner">♥</div></div>
-    <button class="btn btn--ghost" type="button" id="replayBtn">↺ Đọc lại từ đầu</button>
-    <p class="ending__foot mono">MƯỜI NGÀN NĂM NỮA · VẪN LÀ EM</p>
+    <p class="ending__years" aria-label="10.000 năm"><span class="odo" id="yearsOdo" data-digits="5" data-sep="2"></span><span class="ending__years-unit">năm</span></p>
+  </div>
+  <div class="ending__beat ending__beat--last" id="finale">
+    <button class="ending__heart" id="heartBtn" type="button" aria-label="Trái tim"><span class="ending__heart-flat" aria-hidden="true">♥</span></button>
+    <p class="ending__secret" id="secret" role="status" aria-live="polite"></p>
+    <p class="ending__foot">MƯỜI NGÀN NĂM NỮA · VẪN LÀ EM</p>
+    <button class="btn btn--quiet btn--glass magnetic" type="button" id="replayBtn"><span class="btn__in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.600-5.900M4 4v5h5"/></svg>Đọc lại từ đầu</span></button>
   </div>
 </section>
 </main>
 
-<!-- ===== Lightbox ảnh ===== -->
+<!-- Lightbox ảnh -->
 <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Xem ảnh">
-  <button class="lb__close" type="button" aria-label="Đóng">✕</button>
-  <button class="lb__nav lb__nav--prev" type="button" aria-label="Ảnh trước">‹</button>
-  <figure class="lb__pol">
-    <i class="washi washi--peach"></i>
-    <div class="lb__img"></div>
-    <figcaption class="lb__cap script"></figcaption>
-  </figure>
-  <button class="lb__nav lb__nav--next" type="button" aria-label="Ảnh sau">›</button>
+  <button class="lb__close" type="button" aria-label="Đóng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <button class="lb__nav lb__nav--prev" type="button" aria-label="Ảnh trước"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4l-8 8 8 8"/></svg></button>
+  <figure class="pol lb__pol"><div class="lb__img"></div><figcaption class="pol__cap lb__cap"></figcaption></figure>
+  <button class="lb__nav lb__nav--next" type="button" aria-label="Ảnh sau"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8"/></svg></button>
 </div>
 
-<!-- ===== Trình phát nhạc · đĩa than ===== -->
-<div class="player" id="player">
-  <button class="player__disc" type="button" aria-label="Mở trình phát nhạc">
-    <span class="vinyl"></span>
-    <span class="tonearm"></span>
-  </button>
-  <div class="player__meta">
-    <div class="player__title">Bài hát của mình</div>
-    <div class="player__sub mono"><span class="player__src">piano</span> · <span class="player__time">00:00</span></div>
-    <div class="player__bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  </div>
-  <button class="player__play" type="button" aria-label="Phát nhạc">▶</button>
-  <label class="player__vol"><span aria-hidden="true">♪</span><input type="range" min="0" max="100" value="60" aria-label="Âm lượng"><output>60</output></label>
-</div>
-
+<div class="curtain" aria-hidden="true"></div>
 <audio id="song" preload="auto" loop playsinline></audio>
 
-<script src="vendor/gsap.min.js"></script>
-<script src="vendor/ScrollTrigger.min.js"></script>
-<script src="vendor/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/DrawSVGPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/sky.js"></script>
+<script src="js/cake3d.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/scenes/gate.js"></script>
+<script src="js/scenes/hello.js"></script>
+<script src="js/scenes/story.js"></script>
+<script src="js/scenes/memories.js"></script>
+<script src="js/scenes/cake.js"></script>
+<script src="js/scenes/letter.js"></script>
+<script src="js/scenes/gift.js"></script>
+<script src="js/scenes/ending.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
